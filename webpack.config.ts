@@ -2,6 +2,7 @@ import path from "path";
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import webpack from "webpack";
 import type {Configuration as DevServerConfiguration } from "webpack-dev-server";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
 
 type Mode = 'production' | 'development';
 
@@ -15,7 +16,7 @@ export default (env: EnvVariables)=> {
 
     const config: webpack.Configuration = {
         mode: env.mode ??  "development",
-        entry: path.resolve(__dirname, 'src', 'index.ts'),
+        entry: path.resolve(__dirname, 'src', 'index.tsx'),
         output: {
             path: path.resolve(__dirname, 'build'),
             filename: "[name].[contenthash].js",
@@ -23,10 +24,22 @@ export default (env: EnvVariables)=> {
         },
         plugins: [
             new HtmlWebpackPlugin({template: path.resolve(__dirname, 'public', "index.html")}),
-            isDev && new webpack.ProgressPlugin()
+            isDev && new webpack.ProgressPlugin(),
+            !isDev && new MiniCssExtractPlugin({
+                filename: "css/[name].[contenthash:8].css",
+                chunkFilename: "css/[id].[contenthash:8].css",
+            }),
         ].filter(Boolean),
         module: {
             rules: [
+                {
+                    test: /\.s[ac]ss$/i,
+                    use: [
+                        isDev? 'style-loader' : MiniCssExtractPlugin.loader,
+                        "css-loader",
+                        "sass-loader",
+                    ],
+                },
                 {
                     test: /\.tsx?$/,
                     use: 'ts-loader',
@@ -39,7 +52,7 @@ export default (env: EnvVariables)=> {
         },
         devtool: isDev ? 'inline-source-map' : false,
         devServer: isDev ? {
-            port: env.port ?? 5011,
+            port: env.port ?? 5012,
             open: true,
         } : undefined,
     }
