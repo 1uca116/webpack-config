@@ -1,6 +1,6 @@
 import React from 'react';
-import './App.scss';
+import styles from './App.module.scss';
 
 export const App = () => {
-  return <div className={'test'}>Hi</div>;
+  return <div className={styles.test}>Hi</div>;
 };
