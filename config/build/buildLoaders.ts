@@ -6,13 +6,13 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
   const isDev = options.mode === 'development';
 
   const cssLoaderWithModules = {
-    loader: "css-loader",
+    loader: 'css-loader',
     options: {
       modules: {
-        localIdentName: isDev? '[path][name]__[local]': '[hash:base64:8]'
-      }
+        localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64:8]',
+      },
     },
-  }
+  };
   const scssLoader = {
     test: /\.s[ac]ss$/i,
     use: [
@@ -26,5 +26,31 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
     use: 'ts-loader',
     exclude: /node_modules/,
   };
-  return [scssLoader, tsLoader];
+  const assetLoader = {
+    test: /\.(png|jpg|jpeg|gif)$/i,
+    type: 'asset/resource',
+  };
+  const svgLoader = {
+    test: /\.svg$/,
+    use: [
+      {
+        loader: '@svgr/webpack',
+        options: {
+          icon: true,
+          svgoConfig: {
+            plugins: [
+              {
+                name: 'convertColors',
+                params: {
+                  currentColor: true
+                }
+              }
+            ]
+          }
+        },
+      },
+    ],
+  };
+
+  return [scssLoader, tsLoader, assetLoader, svgLoader];
 }
