@@ -23,7 +23,10 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
   };
   const tsLoader = {
     test: /\.tsx?$/,
-    use: 'ts-loader',
+    use: [{
+      loader: 'ts-loader',
+      options: { transpileOnly: true }
+    }],
     exclude: /node_modules/,
   };
   const assetLoader = {
@@ -42,11 +45,11 @@ export function buildLoaders(options: BuildOptions): ModuleOptions['rules'] {
               {
                 name: 'convertColors',
                 params: {
-                  currentColor: true
-                }
-              }
-            ]
-          }
+                  currentColor: true,
+                },
+              },
+            ],
+          },
         },
       },
     ],
