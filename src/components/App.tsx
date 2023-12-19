@@ -8,6 +8,7 @@ import  CalendarLogo from '@/assets/calendar.svg';
 export const App = () => {
   return (
     <div className={styles.test}>
+        <h1>platform = {__PLATFORM__}</h1>
         <div>
             <img src={imgPng} width={250}/>
             <img src={imgJpg} width={250}/>
