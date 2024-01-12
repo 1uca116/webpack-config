@@ -6,8 +6,8 @@ import imgJpg from '@/assets/imageJpg.jpg';
 
 export const App = () => {
   return (
-    <div className={styles.test}>
-      <div>
+    <div className={styles.test} data-testid={'App.DataTestId'}>
+      <div data-testid={'Images.DataTestId'}>
         <img src={imgPng} width={250} />
         <img src={imgJpg} width={250} />
       </div>
